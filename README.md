@@ -2,6 +2,13 @@
 
 This repository contains code, data, and model results used to generate a feature dataset from simulations of the Van der Pol oscillator and to train/evaluate classifiers to predict oscillation regimes.
 
+**Contributors**
+BL.EN.U4AID23003- Amara Pranav
+BL.EN.U4AID23006- B G Rajath Siddarth
+BL.EN.U4AID23054- V. Sidharrth
+BL.EN.U4AID23063- Paruchuri Sai
+
+
 **Project summary**
 - Generates time-series windows from a Simulink Van der Pol model (`vanderpol.slx`).
 - Extracts time-domain features per window (RMS, entropy, crest factor, kurtosis, etc.).
