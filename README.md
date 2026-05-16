@@ -3,6 +3,8 @@
 This repository contains code, data, and model results used to generate a feature dataset from simulations of the Van der Pol oscillator and to train/evaluate classifiers to predict oscillation regimes.
 
 **Contributors**
+
+
 BL.EN.U4AID23003- Amara Pranav
 BL.EN.U4AID23006- B G Rajath Siddarth
 BL.EN.U4AID23054- V. Sidharrth
