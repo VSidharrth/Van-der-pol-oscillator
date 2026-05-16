@@ -1,0 +1,26 @@
+model,best_params,cv_f1_weighted
+Logistic Regression,"{'model__C': np.float64(0.0745934328572655), 'model__penalty': 'l1'}",1.0
+Ridge Classifier,{'model__alpha': np.float64(0.0745934328572655)},1.0
+SGD Classifier,"{'model__alpha': np.float64(0.00031489116479568613), 'model__learning_rate': 'optimal', 'model__loss': 'modified_huber', 'model__penalty': 'elasticnet'}",1.0
+Passive Aggressive,"{'model__C': np.float64(0.03148911647956861), 'model__loss': 'hinge'}",1.0
+Perceptron,"{'model__alpha': np.float64(0.0001329291894316216), 'model__penalty': 'l2'}",1.0
+Linear SVM,{'model__C': np.float64(0.0745934328572655)},1.0
+SVM (RBF),"{'model__C': np.float64(0.31489116479568624), 'model__gamma': np.float64(0.07114476009343425)}",1.0
+NuSVC (RBF),"{'model__gamma': np.float64(0.0013292918943162175), 'model__nu': 0.1}",1.0
+KNN,"{'model__weights': 'uniform', 'model__p': 1, 'model__n_neighbors': 3}",1.0
+Nearest Centroid,{'model__metric': 'euclidean'},1.0
+LDA,{'model__shrinkage': None},1.0
+QDA,{'model__reg_param': 0.1},1.0
+Gaussian NB,{'model__var_smoothing': np.float64(7.459343285726563e-11)},1.0
+Bernoulli NB,"{'model__alpha': np.float64(0.004207053950287938), 'model__binarize': 0.5}",1.0
+Multinomial NB,{'model__alpha': np.float64(0.03148911647956861)},1.0
+Decision Tree,"{'model__min_samples_split': 5, 'model__min_samples_leaf': 2, 'model__max_depth': 20, 'model__criterion': 'gini'}",1.0
+Random Forest,"{'model__n_estimators': 200, 'model__min_samples_split': 10, 'model__min_samples_leaf': 4, 'model__max_features': 'log2', 'model__max_depth': 5}",1.0
+Extra Trees,"{'model__n_estimators': 200, 'model__min_samples_split': 10, 'model__min_samples_leaf': 4, 'model__max_features': 'log2', 'model__max_depth': 5}",1.0
+Gradient Boosting,"{'model__subsample': 0.8, 'model__n_estimators': 200, 'model__max_depth': 3, 'model__learning_rate': 0.2}",1.0
+Hist Gradient Boosting,"{'model__max_iter': 100, 'model__max_depth': 6, 'model__learning_rate': 0.05, 'model__l2_regularization': 0.1}",1.0
+Bagging (Tree),"{'model__n_estimators': 200, 'model__max_samples': 1.0, 'model__max_features': 0.5}",1.0
+MLP (Deep),"{'model__alpha': np.float64(0.0001329291894316216), 'model__hidden_layer_sizes': (256, 128, 64), 'model__learning_rate_init': np.float64(0.00023273922280628724)}",1.0
+MLP (Shallow),"{'model__alpha': np.float64(0.0001329291894316216), 'model__hidden_layer_sizes': (64,), 'model__learning_rate_init': np.float64(0.00023273922280628724)}",1.0
+MLP (Wide),"{'model__alpha': np.float64(0.0001329291894316216), 'model__hidden_layer_sizes': (512, 256), 'model__learning_rate_init': np.float64(0.00023273922280628724)}",1.0
+AdaBoost,"{'model__n_estimators': 100, 'model__learning_rate': 0.5}",0.3333333333333333

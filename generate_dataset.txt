@@ -1,0 +1,210 @@
+Create a script in MATLAB named generate_dataset.m (written here in text file in case anyone would face difficulties due to version incompatibility)
+
+clc;
+clear;
+
+%% MU VALUES (4 CLASSES)
+mu_values = [
+
+%% Harmonic
+0 ...
+1e-10 ...
+1e-9 ...
+1e-8 ...
+1e-7 ...
+
+%% Weak Nonlinear
+0.01 ...
+0.05 ...
+0.1 ...
+0.2 ...
+0.5 ...
+
+%% Strong Nonlinear
+2 ...
+3 ...
+4 ...
+5 ...
+7 ...
+
+%% Relaxation
+10 ...
+12 ...
+15 ...
+18 ...
+20 ...
+];
+
+%% WINDOW SETTINGS
+window_size = 100;
+stride = 50;
+
+%% STORAGE
+results = {};
+
+%% LOOP THROUGH MU
+for i = 1:20
+    fprintf('Loop index i = %d\n', i);
+    mu = mu_values(i);
+    fprintf('\n=====================================\n');
+    fprintf('Running simulation for mu = %.10f\n', mu);
+
+    %% RUN SIMULATION
+    assignin('base','mu',mu);
+    sim('vanderpol');
+
+    %% EXTRACT SIGNALS
+    y =output_y.Data;
+    dy=output_dy.Data;
+    ddy=output_data.Data;
+
+    %% EMPTY CHECK
+    if isempty(y)
+        fprintf('Empty output for mu = %.10f\n', mu);
+        continue;
+    end
+
+    %% COLUMN VECTORS
+    y = y(:);
+    dy = dy(:);
+    ddy = ddy(:);
+
+    %% INVALID SIGNAL CHECK
+    if any(isnan(y)) || any(isinf(y)) || max(abs(y)) > 1e6
+        fprintf('Skipping invalid simulation for mu = %.10f\n', mu);
+        continue;
+    end
+
+    %% REMOVE INITIAL TRANSIENT
+    transient_cut = floor(0.2 * length(y));
+    y = y(transient_cut+1:end);
+    dy = dy(transient_cut+1:end);
+    ddy = ddy(transient_cut+1:end);
+
+    %% SIGNAL LENGTH
+    signal_length = length(y);
+    fprintf('Signal length after downsampling = %d\n', signal_length);
+
+    %% REGIME LABELS
+    if mu <= 1e-7
+        regime = "Harmonic";
+    elseif mu > 1e-7 && mu < 1
+        regime = "Weak_Nonlinear";
+    elseif mu >= 1 && mu < 10
+        regime = "Strong_Nonlinear";
+    else
+        regime = "Relaxation";
+    end
+
+    %% WINDOWING
+    sample_count = 0;
+    for start_idx = 1:stride:(signal_length - window_size)
+        end_idx = start_idx + window_size - 1;
+
+        %% EXTRACT WINDOW
+        y_win = y(start_idx:end_idx);
+        dy_win = dy(start_idx:end_idx);
+        ddy_win = ddy(start_idx:end_idx);
+
+        %% NORMALIZE WINDOW
+        y_win = (y_win - mean(y_win)) / (std(y_win) + eps);
+
+        %% FEATURE EXTRACTION
+
+        %% VARIABILITY
+        std_y = std(y_win);
+        %% RMS FEATURES
+        rms_y = rms(y_win);
+        rms_dy = rms(dy_win);
+        rms_ddy = rms(ddy_win);
+
+        %% ENERGY FEATURES
+        energy_y = sum(y_win.^2);
+        signal_power = mean(y_win.^2);
+
+        %% AMPLITUDE FEATURES
+        peak_to_peak = max(y_win) - min(y_win);
+        crest_factor = max(abs(y_win)) / (rms_y + eps);
+
+        %% OSCILLATION FEATURES
+        zero_crossings = sum(diff(sign(y_win)) ~= 0);
+
+        %% ENTROPY
+        prob = abs(y_win).^2;
+        prob = prob / (sum(prob) + eps);
+        entropy_y = -sum(prob .* log2(prob + eps));
+
+        %% SHAPE FEATURES
+        skewness_y = skewness(y_win);
+        kurtosis_y = kurtosis(y_win);
+        %% ADDITIONAL FEATURES
+        mean_abs_y = mean(abs(y_win));
+        shape_factor = rms_y / (mean_abs_y + eps);
+
+        %% STORE SAMPLE
+        row = {
+            mu,...
+            std_y,...
+            rms_y,...
+            rms_dy,...
+            rms_ddy,...
+            energy_y,...
+            signal_power,...
+            peak_to_peak,...
+            crest_factor,...
+            zero_crossings,...
+            entropy_y,...
+            skewness_y,...
+            kurtosis_y,...
+            mean_abs_y,...
+            shape_factor,...
+            regime
+            };
+
+        results = [results; row];
+
+        sample_count = sample_count + 1;
+
+    end
+    fprintf('Generated %d samples for mu = %.10f\n', sample_count, mu);
+    fprintf('Completed processing for mu = %.10f\n', mu);
+    fprintf('=====================================\n');
+
+end
+
+%% CREATE TABLE
+dataset_table = cell2table(results,...
+'VariableNames',...
+{'mu',...
+'std_y',...
+'rms_y',...
+'rms_dy',...
+'rms_ddy',...
+'energy_y',...
+'signal_power',...
+'peak_to_peak',...
+'crest_factor',...
+'zero_crossings',...
+'entropy_y',...
+'skewness_y',...
+'kurtosis_y',...
+'mean_abs_y',...
+'shape_factor',...
+'regime'});
+
+%% DISPLAY CLASS DISTRIBUTION
+disp('=====================================');
+disp('CLASS DISTRIBUTION');
+disp('=====================================');
+tabulate(dataset_table.regime)
+
+%% TOTAL SAMPLE COUNT
+fprintf('\nTotal Samples Generated = %d\n', height(dataset_table));
+
+%% SAVE DATASET
+writetable(dataset_table,'vanderpol_dataset_final.csv');
+
+disp('=====================================');
+disp('Dataset generation completed');
+disp('CSV file saved as vanderpol_dataset_final.csv');
+disp('=====================================');
