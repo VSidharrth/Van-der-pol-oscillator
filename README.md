@@ -5,10 +5,10 @@ This repository contains code, data, and model results used to generate a featur
 **Contributors**
 
 
-BL.EN.U4AID23003- Amara Pranav
-BL.EN.U4AID23006- B G Rajath Siddarth
-BL.EN.U4AID23054- V. Sidharrth
-BL.EN.U4AID23063- Paruchuri Sai
+- BL.EN.U4AID23003- Amara Pranav
+- BL.EN.U4AID23006- B G Rajath Siddarth
+- BL.EN.U4AID23054- V. Sidharrth
+- BL.EN.U4AID23063- Paruchuri Sai
 
 
 **Project summary**
